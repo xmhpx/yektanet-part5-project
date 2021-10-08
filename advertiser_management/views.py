@@ -1,10 +1,13 @@
-# from django.shortcuts import render
+from django.shortcuts import render
 
 from django.http import HttpResponse
 
+from .models import Ad, Advertiser
 
 def home(request):
-    return HttpResponse("ad ad ad ad")
+    advertisers = Advertiser.objects.order_by('-clicks')
+
+    return render(request, 'ads.html', {'advertisers': advertisers})
 
 
 def inc_clicks(request, ad):

@@ -26,4 +26,4 @@ def click(request, ad_id):
 
 
 def create_ad(request):
-    return HttpResponse("some form to create new ad")
+    return render(request, 'create_ad.html', {})

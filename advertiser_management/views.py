@@ -1,6 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, reverse
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 
 from .models import Ad, Advertiser
 
@@ -14,6 +14,18 @@ def home(request):
         new_ad = Ad(title=title, imgUrl=imgUrl, link=link, advertiser=advertiser)
         new_ad.save()
         advertiser.save()
+
+        advertisers = Advertiser.objects.order_by('-clicks')
+
+        for advertiser in advertisers:
+            for ad in advertiser.ad_set.all():
+                ad.views += 1
+                advertiser.views += 1
+                ad.save()
+            advertiser.save()
+
+        return HttpResponseRedirect(reverse('home'))
+
     except(KeyError, Advertiser.DoesNotExist):
         pass
 

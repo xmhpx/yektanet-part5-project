@@ -15,15 +15,6 @@ def home(request):
         new_ad.save()
         advertiser.save()
 
-        advertisers = Advertiser.objects.order_by('-clicks')
-
-        for advertiser in advertisers:
-            for ad in advertiser.ad_set.all():
-                ad.views += 1
-                advertiser.views += 1
-                ad.save()
-            advertiser.save()
-
         return HttpResponseRedirect(reverse('home'))
 
     except(KeyError, Advertiser.DoesNotExist):

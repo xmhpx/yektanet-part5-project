@@ -6,6 +6,17 @@ from .models import Ad, Advertiser
 
 
 def home(request):
+    try:
+        advertiser = Advertiser.objects.get(pk=request.POST['advertiser_id'])
+        title = request.POST['title']
+        imgUrl = request.POST['image_url']
+        link = request.POST['link']
+        new_ad = Ad(title=title, imgUrl=imgUrl, link=link, advertiser=advertiser)
+        new_ad.save()
+        advertiser.save()
+    except(KeyError, Advertiser.DoesNotExist):
+        pass
+
     advertisers = Advertiser.objects.order_by('-clicks')
 
     for advertiser in advertisers:
@@ -16,6 +27,8 @@ def home(request):
         advertiser.save()
 
     return render(request, 'ads.html', {'advertisers': advertisers})
+
+
 
 
 def click(request, ad_id):

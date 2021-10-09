@@ -20,7 +20,7 @@ def home(request):
     except(KeyError, Advertiser.DoesNotExist):
         pass
 
-    advertisers = Advertiser.objects.order_by('-clicks')
+    advertisers = Advertiser.objects.all()
 
     for advertiser in advertisers:
         for ad in advertiser.ad_set.all():
@@ -30,8 +30,6 @@ def home(request):
         advertiser.save()
 
     return render(request, 'ads.html', {'advertisers': advertisers})
-
-
 
 
 def click(request, ad_id):

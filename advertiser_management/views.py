@@ -7,7 +7,8 @@ from .models import Ad, Advertiser
 
 def home(request):
     try:
-        advertiser = Advertiser.objects.get(pk=request.POST['advertiser_id'])
+        advertiser_id = request.POST['advertiser_id']
+        advertiser = Advertiser.objects.get(pk=advertiser_id)
         title = request.POST['title']
         imgUrl = request.POST['image_url']
         link = request.POST['link']
@@ -17,7 +18,12 @@ def home(request):
 
         return HttpResponseRedirect(reverse('home'))
 
-    except(KeyError, Advertiser.DoesNotExist):
+    except(Advertiser.DoesNotExist):
+        return render(request, 'create_ad.html', {
+            'error_message': "Advertiser id does not exist.",
+        })
+
+    except(KeyError):
         pass
 
     advertisers = Advertiser.objects.all()

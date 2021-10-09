@@ -4,13 +4,16 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from .models import Ad, Advertiser
 
+
 def home(request):
     advertisers = Advertiser.objects.order_by('-clicks')
 
     for advertiser in advertisers:
         for ad in advertiser.ad_set.all():
             ad.views += 1
+            advertiser.views += 1
             ad.save()
+        advertiser.save()
 
     return render(request, 'ads.html', {'advertisers': advertisers})
 
@@ -18,6 +21,8 @@ def home(request):
 def click(request, ad_id):
     ad = get_object_or_404(Ad, pk=ad_id)
     ad.clicks += 1
+    ad.advertiser.clicks += 1
+    ad.advertiser.save()
     ad.save()
     # output = "You clicked on %s" % ad
     # clcks = " now it has %s clicks" % ad.clicks

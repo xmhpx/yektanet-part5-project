@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.shortcuts import render, get_object_or_404, reverse
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 
 from .models import Ad, Advertiser, View, Click
 
@@ -33,9 +33,10 @@ def home(request):
 
     for advertiser in advertisers:
         for ad in advertiser.ad_set.all():
-            new_view = View(ad=ad, user_ip=user_ip, datetime=datetime.now())
-            new_view.save()
-            advertiser.views += 1
+            if ad.approve:
+                new_view = View(ad=ad, user_ip=user_ip, datetime=datetime.now())
+                new_view.save()
+                advertiser.views += 1
         advertiser.save()
 
     return render(request, 'ads.html', {'advertisers': advertisers})
@@ -43,6 +44,10 @@ def home(request):
 
 def click(request, ad_id):
     ad = get_object_or_404(Ad, pk=ad_id)
+
+    if not ad.approve:
+        raise Http404
+
     user_ip = request.META['REMOTE_ADDR']
 
     new_click = Click(ad=ad, user_ip=user_ip, datetime=datetime.now())
@@ -52,7 +57,7 @@ def click(request, ad_id):
     ad.advertiser.save()
 
     # output = "You clicked on %s" % ad
-    # clcks = " now it has %s clicks" % ad.clicks
+    # clicks = " now it has %s clicks" % ad.clicks
     # views = " and %s views" % ad.views
 
     return HttpResponseRedirect(ad.link)

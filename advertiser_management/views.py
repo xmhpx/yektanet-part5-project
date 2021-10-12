@@ -18,12 +18,12 @@ def home(request):
 
         return HttpResponseRedirect(reverse('home'))
 
-    except Advertiser.DoesNotExist:
+    except(Advertiser.DoesNotExist):
         return render(request, 'create_ad.html', {
             'error_message': "Advertiser id does not exist.",
         })
 
-    except KeyError:
+    except(KeyError):
         pass
 
     advertisers = Advertiser.objects.all()

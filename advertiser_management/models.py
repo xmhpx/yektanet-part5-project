@@ -16,6 +16,7 @@ class Ad(models.Model):
     title = models.CharField(max_length=100)
     imgUrl = models.CharField(max_length=500)
     link = models.CharField(max_length=500)
+    approve = models.BooleanField(default=False)
 
 
 class Click(models.Model):

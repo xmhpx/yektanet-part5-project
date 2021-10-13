@@ -1,9 +1,9 @@
 from django.urls import path
 
-from . import views
+from .views import *
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('click/<int:ad_id>/', views.click, name='click'),
-    path('create_ad/', views.create_ad, name='create_ad'),
+    path('', home, name='home'),
+    path('click/<int:ad_id>/', click, name='click'),
+    path('create_ad/', CreateAdView.as_view(), name='create_ad'),
 ]

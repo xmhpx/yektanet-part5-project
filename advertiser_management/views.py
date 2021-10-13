@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from django.views.generic.base import TemplateView
+
 from django.shortcuts import render, get_object_or_404, reverse
 
 from django.http import HttpResponseRedirect, Http404
@@ -63,5 +65,9 @@ def click(request, ad_id):
     return HttpResponseRedirect(ad.link)
 
 
-def create_ad(request):
-    return render(request, 'create_ad.html', {})
+class CreateAdView(TemplateView):
+    template_name = "create_ad.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

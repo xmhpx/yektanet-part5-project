@@ -109,6 +109,29 @@ class DetailView(TemplateView):
 
             details_of_ad[ad][time]['view'] += 1
 
+        delta = 0
+        sz = 0.
+
+        for clk in all_clicks:
+            ad = clk.ad
+            time = clk.datetime
+            try:
+                last_view = View.objects.filter(user_ip__exact=clk.user_ip, datetime__lte=time).order_by('-datetime')[0]
+            except IndexError:
+                last_view = clk
+            td = time-last_view.datetime
+            seconds = td.seconds + 86400 * td.days
+
+            delta += seconds
+            sz += 1.
+
+        avg_delta = None
+        if sz != 0:
+            avg_delta = delta / sz
+
         context['details_of_ad'] = details_of_ad
+        context['avg_delta'] = avg_delta
+        context['delta'] = delta
+        context['sz'] = sz
 
         return context

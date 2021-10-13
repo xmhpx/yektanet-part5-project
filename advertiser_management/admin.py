@@ -19,7 +19,7 @@ class NameListFilter(SimpleListFilter):
         in the right sidebar.
         """
 
-        list_of_titles = [('all', 'Reall All'),
+        list_of_titles = [('all', 'Real All'),
                           (False, 'not approved'),
                           (True, 'approved')]
         return list_of_titles

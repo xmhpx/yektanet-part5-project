@@ -6,9 +6,21 @@
           crossorigin="anonymous">
     <title>Ads Detailed View</title>
 </head>
-avg delta = {{ avg_delta }}
-sz = {{ sz }}
-delta = {{ delta }}
+<li>
+    avg delta = {{ avg_delta }}
+</li>
+<li>
+    number of clicks = {{ sz }}
+</li>
+<li>
+    sum of delta seconds = {{ delta }}
+</li>
+{% for time, dvd in click_per_view.items %}
+<li>
+    from {{ time }} to {{ time }} + {{ delta_time }} had {{ dvd }} clicks per view
+</li>
+{% endfor %}
+
 <body>
 
 

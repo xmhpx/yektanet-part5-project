@@ -15,9 +15,9 @@
 <li>
     sum of delta seconds = {{ delta }}
 </li>
-{% for time, dvd in click_per_view.items %}
+{% for dvd in click_per_view %}
 <li>
-    from {{ time }} to {{ time }} + {{ delta_time }} had {{ dvd }} clicks per view
+    from {{ dvd.1 }} to {{ dvd.1 }} + {{ delta_time }} had {{ dvd.0 }} clicks per view
 </li>
 {% endfor %}
 

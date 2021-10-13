@@ -87,7 +87,7 @@ class DetailView(TemplateView):
 
         for clk in all_clicks:
             ad = clk.ad
-            time = clk.datetime.strftime('%m/%d/%Y : %H')
+            time = clk.datetime.strftime('%m/%d/%Y : %H:00:00')
 
             if ad not in details_of_ad:
                 details_of_ad[ad] = {}
@@ -99,7 +99,7 @@ class DetailView(TemplateView):
 
         for viw in all_views:
             ad = viw.ad
-            time = viw.datetime.strftime('%m/%d/%Y : %H')
+            time = viw.datetime.strftime('%m/%d/%Y : %H:00:00')
 
             if ad not in details_of_ad:
                 details_of_ad[ad] = {}
@@ -133,7 +133,7 @@ class DetailView(TemplateView):
         view_per_time = {}
 
         for clk in all_clicks:
-            time = clk.datetime.strftime("%d/%m/%Y %H")
+            time = clk.datetime.strftime("%m/%d/%Y %H:%M:00")
 
             if time not in click_per_time:
                 click_per_time[time] = 1
@@ -141,7 +141,7 @@ class DetailView(TemplateView):
                 click_per_time[time] += 1
 
         for viw in all_views:
-            time = viw.datetime.strftime("%d/%m/%Y %H")
+            time = viw.datetime.strftime("%m/%d/%Y %H:%M:00")
 
             if time not in view_per_time:
                 view_per_time[time] = 1
@@ -153,13 +153,19 @@ class DetailView(TemplateView):
             if time in click_per_time:
                 click_per_view[time] = click_per_time[time] / view_per_time[time]
             else:
-                click_per_view[time] = 'None'
+                click_per_view[time] = -1
 
-        context['delta_time'] = datetime(2000, 1, 1, 3) - datetime(2000, 1, 1, 2)
+        ordered_by_time_click_per_view = []
+        for time in click_per_view:
+            ordered_by_time_click_per_view.append([click_per_view[time], time])
+
+        ordered_by_time_click_per_view.sort(reverse=True)
+
+        context['delta_time'] = datetime(2000, 1, 1, 1, 3) - datetime(2000, 1, 1, 1, 2)
         context['details_of_ad'] = details_of_ad
         context['avg_delta'] = avg_delta
         context['delta'] = delta
         context['sz'] = sz
-        context['click_per_view'] = click_per_view
+        context['click_per_view'] = ordered_by_time_click_per_view
 
         return context

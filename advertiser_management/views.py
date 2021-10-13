@@ -71,3 +71,44 @@ class CreateAdView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class DetailView(TemplateView):
+    template_name = "detail.html"
+    model = Ad
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_ads = Ad.objects.filter(approve__exact=True)
+        all_clicks = Click.objects.filter(ad__approve__exact=True)
+        all_views = View.objects.filter(ad__approve__exact=True)
+
+        details_of_ad = {}
+
+        for clk in all_clicks:
+            ad = clk.ad
+            time = clk.datetime.strftime('%m/%d/%Y : %H')
+
+            if ad not in details_of_ad:
+                details_of_ad[ad] = {}
+
+            if time not in details_of_ad[ad]:
+                details_of_ad[ad][time] = {'click': 0, 'view': 0}
+
+            details_of_ad[ad][time]['click'] += 1
+
+        for viw in all_views:
+            ad = viw.ad
+            time = viw.datetime.strftime('%m/%d/%Y : %H')
+
+            if ad not in details_of_ad:
+                details_of_ad[ad] = {}
+
+            if time not in details_of_ad[ad]:
+                details_of_ad[ad][time] = {'click': 0, 'view': 0}
+
+            details_of_ad[ad][time]['view'] += 1
+
+        context['details_of_ad'] = details_of_ad
+
+        return context

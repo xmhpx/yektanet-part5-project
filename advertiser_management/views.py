@@ -1,12 +1,18 @@
 from datetime import datetime
 
+from .models import Ad, Advertiser, View, Click
+
+
 from django.views.generic.base import TemplateView
-
 from django.shortcuts import render, get_object_or_404, reverse
-
 from django.http import HttpResponseRedirect, Http404
 
-from .models import Ad, Advertiser, View, Click
+
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 
 def home(request):
@@ -65,7 +71,9 @@ def click(request, ad_id):
     return HttpResponseRedirect(ad.link)
 
 
-class CreateAdView(TemplateView):
+class CreateAdView(TemplateView, APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     template_name = "create_ad.html"
 
     def get_context_data(self, **kwargs):
@@ -73,13 +81,15 @@ class CreateAdView(TemplateView):
         return context
 
 
-class DetailView(TemplateView):
+class DetailView(TemplateView, APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAdminUser]
     template_name = "detail.html"
     model = Ad
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        all_ads = Ad.objects.filter(approve__exact=True)
+        # all_ads = Ad.objects.filter(approve__exact=True)
         all_clicks = Click.objects.filter(ad__approve__exact=True)
         all_views = View.objects.filter(ad__approve__exact=True)
 

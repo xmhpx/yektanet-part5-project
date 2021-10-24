@@ -8,4 +8,5 @@ urlpatterns = [
     path('create_ad/', CreateAdView.as_view(), name='create_ad'),
     path('create_ad2/', CreateAdView2.as_view(), name='create_ad2'),
     path('detail/', DetailView.as_view(), name='detail_view'),
+    path('counters/', CountsView.as_view(), name='counters_view'),
 ]

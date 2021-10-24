@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<div class="container" dir="rtl">
+    {% for counter in all_counters %}
+        <div class="card mt-2 p-2">
+            <h5 class="card-title">from {{ counter.starttime }} to {{ counter.endtime }}</h5>
+            <div class="card-body">
+                <div class="row">
+                    {{ counter.click_cnt }} clicks and {{ counter.view_cnt }} views
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+</html>

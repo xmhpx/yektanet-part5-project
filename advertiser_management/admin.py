@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 
-from .models import Ad, Advertiser, Click, View
+from .models import *
 
 
 class NameListFilter(SimpleListFilter):
@@ -58,3 +58,4 @@ admin.site.register(Ad, AdAdmin)
 admin.site.register(Advertiser)
 admin.site.register(View)
 admin.site.register(Click)
+admin.site.register(Counter)

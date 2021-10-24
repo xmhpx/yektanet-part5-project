@@ -93,6 +93,20 @@ class CreateAdView(TemplateView, APIView):
         return context
 
 
+class CountsView(TemplateView, APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAdminUser]
+    template_name = "counts.html"
+    model = Counter
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['all_counters'] = Counter.objects.all()
+
+        return context
+
+
 class DetailView(TemplateView, APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAdminUser]

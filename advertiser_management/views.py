@@ -1,11 +1,14 @@
 from datetime import datetime
 
-from .models import Ad, Advertiser, View, Click
+from .models import *
+
+from .tasks import celery_task
 
 from .serializers import AdSerializer
 
 from django.views.generic.base import TemplateView
 from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -188,3 +191,9 @@ class DetailView(TemplateView, APIView):
         context['click_per_view'] = ordered_by_time_click_per_view
 
         return context
+
+
+def celery_view(request):
+    for counter in range(2):
+        celery_task.delay(counter)
+    return HttpResponse("FINISH PAGE LOAD")

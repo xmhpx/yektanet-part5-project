@@ -44,11 +44,12 @@ class Counter(models.Model):
     endtime = models.DateTimeField()
 
     def __str__(self):
-        return "counter from %s to %s" % (self.click_cnt, self.view_cnt)
+        return "counter from %s to %s" % (self.starttime.strftime("%dth %H:%M:%S"), self.endtime.strftime("%dth %H:%M:%S"))
 
 
 class CounterValue(models.Model):
-    advertiser = models.ManyToManyField(Advertiser)
+    counter = models.ForeignKey(Counter, on_delete=models.CASCADE)
+    advertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
     click_cnt = models.IntegerField()
     view_cnt = models.IntegerField()
 

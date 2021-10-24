@@ -126,6 +126,22 @@ class CounterCallerView(TemplateView, APIView):
         return context
 
 
+class DailyCounterCallerView(TemplateView, APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAdminUser]
+    template_name = "counts.html"
+    model = Counter
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        new_counter = daily_counter()
+
+        context['new_counter'] = new_counter
+
+        return context
+
+
 class DetailView(TemplateView, APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAdminUser]

@@ -10,4 +10,5 @@ urlpatterns = [
     path('detail/', DetailView.as_view(), name='detail_view'),
     path('counters/', CountsView.as_view(), name='counters_view'),
     path('count/', CounterCallerView.as_view(), name='counter_caller'),
+    path('countdaily/', DailyCounterCallerView.as_view(), name='daily_counter_caller'),
 ]

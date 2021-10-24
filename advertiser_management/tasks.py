@@ -26,7 +26,38 @@ def counter():
     new_counter.save()
 
     for pk in click_cnt:
-        new_counter_value = CounterValue(counter=new_counter, advertiser=get_object_or_404(Advertiser, pk=pk), click_cnt=click_cnt[pk],
+        new_counter_value = CounterValue(counter=new_counter, advertiser=get_object_or_404(Advertiser, pk=pk),
+                                         click_cnt=click_cnt[pk],
+                                         view_cnt=view_cnt[pk])
+        new_counter_value.save()
+
+    new_counter.save()
+
+    return new_counter.pk
+
+
+def daily_counter():
+    now = datetime.now()
+    click_cnt = {}
+    view_cnt = {}
+
+    for adv in Advertiser.objects.all():
+        view_cnt[adv.pk] = 0
+        click_cnt[adv.pk] = 0
+
+    for counter in Counter.objects.all():
+        if counter.starttime.replace(tzinfo=None) > now - timedelta(hours=24):
+            for counter_value in counter.countervalue_set.all():
+                click_cnt[counter_value.advertiser.pk] += counter_value.click_cnt
+                view_cnt[counter_value.advertiser.pk] += counter_value.view_cnt
+
+    new_counter = Counter(starttime=now - timedelta(hours=24), endtime=now)
+
+    new_counter.save()
+
+    for pk in click_cnt:
+        new_counter_value = CounterValue(counter=new_counter, advertiser=get_object_or_404(Advertiser, pk=pk),
+                                         click_cnt=click_cnt[pk],
                                          view_cnt=view_cnt[pk])
         new_counter_value.save()
 

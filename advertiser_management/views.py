@@ -2,7 +2,7 @@ from datetime import datetime
 
 from .models import *
 
-from .tasks import celery_task
+# from .tasks import celery_task
 
 from .serializers import AdSerializer
 

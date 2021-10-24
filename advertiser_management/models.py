@@ -39,14 +39,20 @@ class View(models.Model):
         return "user with ip \"%s\" viewed \"%s\" at \"%s\"" % (self.user_ip, self.ad, self.datetime)
 
 
-class AdvertiserCounter(models.Model):
-    advertisers = models.ManyToManyField(Advertiser)
+class Counter(models.Model):
     starttime = models.DateTimeField()
     endtime = models.DateTimeField()
+
+    def __str__(self):
+        return "counter from %s to %s" % (self.click_cnt, self.view_cnt)
+
+
+class CounterValue(models.Model):
+    advertiser = models.ManyToManyField(Advertiser)
     click_cnt = models.IntegerField()
     view_cnt = models.IntegerField()
 
     def __str__(self):
-        return "%s clicks and %s views from %s to %s" % (self.click_cnt, self.view_cnt, self.starttime, self.endtime)
+        return "counted %s clicks and %s views for %s" % (self.click_cnt, self.view_cnt, self.advertiser)
 
 # Create your models here.

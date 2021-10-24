@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 
 
+@shared_task
 def counter():
     now = datetime.now()
     click_cnt = {}
@@ -36,6 +37,7 @@ def counter():
     return new_counter.pk
 
 
+@shared_task
 def daily_counter():
     now = datetime.now()
     click_cnt = {}

@@ -4,6 +4,9 @@ from .models import *
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 
+from celery import task
+from celery import shared_task
+
 
 @shared_task
 def counter():
